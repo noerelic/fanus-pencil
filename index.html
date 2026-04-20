@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dialog Fanus • Tasarım Oluştur</title>
+    <meta name="color-scheme" content="dark" />
+    <style>
+:root{
+  --bg:#0b0b0d;
+  --panel:rgba(255,255,255,.06);
+  --panel2:rgba(10,10,12,.72);
+  --border:rgba(255,255,255,.10);
+  --text:rgba(255,255,255,.92);
+  --muted:rgba(255,255,255,.62);
+  --accent:#ffffff;
+  --accent2:#cfcfcf;
+  --glow:rgba(255,255,255,.10);
+  --radius:18px;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background: radial-gradient(1200px 700px at 30% 10%, rgba(255,255,255,.06), transparent 60%), var(--bg);
+  color:var(--text);
+}
+
+button,input,select,textarea{font:inherit}
+
+.hidden{display:none !important}
+.muted{color:var(--muted);font-size:13px}
+
+.topbar{
+  position:sticky;top:0;z-index:10;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(16px);
+  background: var(--panel2);
+}
+
+.brand{display:flex;align-items:center;gap:12px}
+.siteLogo{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  object-fit:cover;
+  box-shadow:0 16px 50px rgba(0,0,0,.50);
+}
+.brandTitle{font-weight:900;letter-spacing:.2px}
+.brandSub{font-size:12px;color:rgba(233,236,244,.68)}
+
+.main{
+  width:min(1100px, calc(100% - 24px));
+  margin:18px auto;
+  display:flex;
+  justify-content:center;
+}
+
+.grid{
+  width:100%;
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:14px;
+}
+@media (min-width: 920px){
+  .grid{grid-template-columns:1.05fr .95fr;align-items:start}
+}
+
+.card{
+  background: var(--panel);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius: var(--radius);
+  padding:16px;
+  box-shadow: 0 26px 90px rgba(0,0,0,.55);
+  animation: cardIn 260ms ease-out;
+}
+@keyframes cardIn{
+  from{transform: translateY(8px); opacity:.72}
+  to{transform: translateY(0); opacity:1}
+}
+
+h1,h2{margin:0 0 10px 0}
+p{margin:0 0 12px 0}
+
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width: 640px){.row{grid-template-columns:1fr 1fr}}
+.row.full{grid-template-columns: 1fr}
+.field{display:flex;flex-direction:column;gap:6px}
+.label{font-size:12px;color:rgba(233,236,244,.75)}
+
+input,select,textarea{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  color: var(--text);
+  outline:none;
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+input:focus,select:focus,textarea:focus{
+  border-color: rgba(255,255,255,.40);
+  box-shadow:0 0 0 4px rgba(255,255,255,.10);
+  transform: translateY(-1px);
+}
+textarea{min-height:110px;resize:vertical}
+
+.btn{
+  border:0;border-radius:14px;
+  padding:12px 14px;
+  font-weight:850;
+  cursor:pointer;
+  color:#0b0b0d;
+  background: #ffffff;
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
+  transition: transform 120ms ease, filter 120ms ease, box-shadow 200ms ease;
+  letter-spacing:.4px;
+  text-transform: uppercase;
+  font-size: 13px;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after{
+  content:"";
+  position:absolute;
+  inset:-60% -80%;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,.06), transparent);
+  transform: translateX(-40%) rotate(12deg);
+  transition: transform 700ms ease;
+  pointer-events:none;
+}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.02); box-shadow:0 26px 76px rgba(0,0,0,.55)}
+.btn:hover::after{transform: translateX(40%) rotate(12deg)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{cursor:not-allowed;opacity:.55;filter:grayscale(.3)}
+.btn.big{height:56px;font-size:15px;border-radius:16px}
+.btn.ghost{
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.88);
+  box-shadow:none;
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.divider{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+.thumbs{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:10px;
+}
+.thumb{
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  aspect-ratio: 1/1;
+}
+.thumb img{width:100%;height:100%;object-fit:cover;transform:scale(1);transition:transform 180ms ease}
+.thumb:hover img{transform:scale(1.03)}
+
+.emptyBox{
+  border-radius:16px;
+  border:1px dashed rgba(255,255,255,.16);
+  padding:18px;
+  text-align:center;
+  color: rgba(233,236,244,.65);
+  background: rgba(0,0,0,.12);
+}
+.resultEmpty{height:300px;display:flex;align-items:center;justify-content:center}
+
+.resultFrame{
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  overflow:hidden;
+}
+.resultImg{width:100%;height:auto;display:block}
+
+.error{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  background: rgba(255,60,60,.12);
+  border:1px solid rgba(255,60,60,.25);
+  color: rgba(255,190,190,.95);
+  font-weight:750;
+  white-space: pre-wrap;
+}
+
+.progressModal{
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.52);
+  backdrop-filter: blur(12px);
+  z-index: 50;
+  animation: modalFade 180ms ease-out;
+}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+.progressCard{
+  width: min(520px, calc(100% - 28px));
+  border-radius: 22px;
+  background: rgba(20,20,22,.72);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 40px 140px rgba(0,0,0,.70);
+  padding: 18px;
+  transform-origin: 50% 70%;
+  animation: modalPop 200ms ease-out;
+}
+@keyframes modalPop{from{transform:scale(.98);opacity:.75}to{transform:scale(1);opacity:1}}
+.progressTitle{font-weight:900;letter-spacing:.2px;margin:0 0 10px 0}
+.progressBar{
+  height: 8px;
+  width: 0%;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 0 20px rgba(255,255,255,.12);
+  transition: width 140ms ease;
+}
+.progressText{margin-top:10px;font-size:12px;color:rgba(255,255,255,.70);font-weight:850}
+
+.loginCard{max-width:420px;margin:100px auto;text-align:center}
+.warnCard{display:none}
+
+.footer{
+  width:min(1100px, calc(100% - 24px));
+  margin: 0 auto 18px auto;
+  padding: 0 4px;
+}
+
+/* Render engine (export) */
+.htmlRenderWrap{position:fixed;left:-99999px;top:0;width:0;height:0;overflow:hidden}
+.htmlCanvas{
+  position:relative;
+  background:var(--bg);
+  overflow:hidden;
+  font-family: var(--font-body);
+  --grain: rgba(255,255,255,.06);
+}
+.htmlCanvas.sq{width:1000px;height:1000px}
+.htmlCanvas.st{width:1080px;height:1920px}
+
+.htmlBg{
+  position:absolute;inset:0;
+  background: radial-gradient(900px 700px at 18% 12%, rgba(255,255,255,.08), transparent 62%), var(--bg);
+}
+.htmlBg::after{
+  content:"";
+  position:absolute;inset:-20%;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,.02) 2px 3px);
+  opacity:.25;
+  transform: rotate(-6deg);
+  pointer-events:none;
+}
+
+.htmlPhoto{position:absolute;inset:0}
+.htmlPhoto img{width:100%;height:100%;object-fit:cover;transform:scale(1.02);filter:contrast(1.05) saturate(1.05)}
+.htmlPhoto .ph{width:100%;height:100%;background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02))}
+
+.htmlOverlay{
+  position:absolute;
+  left:60px;right:60px;bottom:150px;
+  padding:28px;
+  border-radius:32px;
+  background: rgba(10,12,18,.54);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 30px 110px rgba(0,0,0,.55);
+}
+.htmlCanvas.st .htmlOverlay{left:70px;right:70px;bottom:200px;padding:34px}
+
+.chipRow{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.chip{
+  padding:10px 14px;border-radius:999px;
+  background: rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  color: rgba(233,236,244,.95);
+  font-weight:900;letter-spacing:.6px;font-size:18px;
+}
+
+.headline{
+  font-family: var(--font-display);
+  font-weight:950;
+  letter-spacing:-.8px;
+  line-height:1.05;
+  font-size:64px;
+  margin-bottom:8px;
+  color:#f5f7ff;
+  text-shadow: 0 18px 60px rgba(0,0,0,.6);
+}
+.htmlCanvas.st .headline{font-size:84px}
+.subcopy{
+  margin-top: 10px;
+  font-size: 22px;
+  line-height: 1.35;
+  color: rgba(233,236,244,.86);
+  text-shadow: 0 18px 60px rgba(0,0,0,.55);
+  max-width: 920px;
+}
+.htmlCanvas.st .subcopy{font-size: 28px}
+
+.price{
+  display:inline-block;
+  font-weight:950;
+  font-size:44px;
+  padding:12px 16px;
+  border-radius:18px;
+  background: #fff;
+  color:#0b0b0d;
+  box-shadow: 0 28px 90px rgba(0,0,0,.35);
+  margin-top: 14px;
+}
+.agent{
+  margin-top:22px;
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  color: rgba(233,236,244,.92);
+}
+.agentName,.agentPhone{font-weight:900;font-size:22px}
+
+.brandBottomLogo{
+  position:absolute;
+  left:50%;
+  transform: translateX(-50%);
+  bottom: 28px;
+  height: 100px;
+  width:auto;
+  max-width: 78%;
+  filter: drop-shadow(0 22px 60px rgba(0,0,0,.78));
+}
+.htmlCanvas.st .brandBottomLogo{height: 100px; bottom: 38px}
+
+/* --- Template layouts (actually different) --- */
+.layout-hero-glass .htmlOverlay{background: rgba(10,12,18,.54)}
+
+.layout-split-panel .htmlPhoto{inset:0}
+.layout-split-panel .htmlOverlay{
+  left:0;right:0;bottom:0;
+  border-radius:0;
+  padding:34px 60px;
+  background: linear-gradient(180deg, rgba(11,13,18,.0), rgba(11,13,18,.85) 28%, rgba(11,13,18,.92));
+  border:0;
+}
+.htmlCanvas.st.layout-split-panel .htmlOverlay{padding:46px 70px}
+.layout-split-panel .chip{background: rgba(0,0,0,.26)}
+
+.layout-corner-badges .chipRow{
+  position:absolute;
+  left:56px;right:56px;top:54px;
+  justify-content:space-between;
+  margin:0;
+}
+.layout-corner-badges .htmlOverlay{
+  left:56px;right:56px;bottom:150px;
+  background: rgba(10,12,18,.48);
+}
+.layout-corner-badges .chip{backdrop-filter: blur(10px)}
+
+.layout-editorial .htmlBg{
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(11,11,13,.86)), var(--bg);
+}
+.layout-editorial .htmlOverlay{
+  background: transparent;
+  border:0;
+  box-shadow:none;
+  backdrop-filter:none;
+  left:70px;right:70px;bottom:160px;
+  padding:0;
+}
+.layout-editorial .chip{background: rgba(255,255,255,.06)}
+.layout-editorial .headline{font-size:78px;letter-spacing:-1.2px}
+.layout-editorial .price{border-radius:8px}
+.htmlCanvas.st.layout-editorial .headline{font-size:104px}
+
+.layout-poster .htmlPhoto img{filter:contrast(1.08) saturate(1.08) brightness(.98)}
+.layout-poster .htmlOverlay{
+  left:70px;right:70px;bottom:170px;
+  border-radius: 44px;
+  background: rgba(11,13,18,.68);
+  border: 1px solid rgba(255,255,255,.16);
+}
+.layout-poster .chip{font-size:16px}
+.layout-poster .headline{font-size:72px}
+.htmlCanvas.st.layout-poster .headline{font-size:98px}
+
+.layout-minimalist .htmlOverlay{
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  box-shadow: none;
+  left: 60px;
+  right: 60px;
+  bottom: 140px;
+  padding: 0;
+  text-align:center;
+}
+.layout-minimalist .chipRow{justify-content:center}
+.layout-minimalist .headline{font-size:72px;text-transform:uppercase;letter-spacing:2px}
+.layout-minimalist .price{background:#fff;color:#000;border-radius:6px}
+.layout-minimalist .agent{justify-content:center;border-top:1px solid rgba(255,255,255,.2);padding-top:20px}
+.layout-minimalist .subcopy{margin-left:auto;margin-right:auto}
+.htmlCanvas.st.layout-minimalist .headline{font-size:96px}
+
+.layout-luxury-frame .htmlBg{
+  background: radial-gradient(900px 700px at 20% 10%, rgba(255,255,255,.07), transparent 60%), linear-gradient(180deg, rgba(11,13,18,.0), rgba(11,13,18,.92)), var(--bg);
+}
+.layout-luxury-frame::before{
+  content:"";
+  position:absolute;inset:44px;
+  border-radius:38px;
+  border: 2px solid rgba(255,255,255,.20);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset;
+  pointer-events:none;
+}
+.layout-luxury-frame .htmlOverlay{
+  left:90px;right:90px;bottom:170px;
+  border-radius: 26px;
+  background: rgba(10,12,18,.48);
+}
+.layout-luxury-frame .headline{font-size:70px}
+.htmlCanvas.st.layout-luxury-frame .headline{font-size:96px}
+
+.layout-diagonal-cut .htmlOverlay{
+  left:0;right:0;bottom:0;
+  border-radius:0;
+  padding:44px 64px;
+  background: linear-gradient(135deg, rgba(11,13,18,.0) 0%, rgba(11,13,18,.88) 35%, rgba(11,13,18,.92));
+  border:0;
+  clip-path: polygon(0 22%, 100% 0, 100% 100%, 0 100%);
+}
+.layout-diagonal-cut .chipRow{margin-bottom:14px}
+
+.layout-clean-panels .htmlOverlay{
+  left:72px;right:72px;bottom:170px;
+  background: rgba(10,12,18,.40);
+  border: 1px solid rgba(255,255,255,.14);
+}
+.layout-clean-panels .chip{background: rgba(255,255,255,.06)}
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <img class="siteLogo" src="https://r.resimlink.com/947OS8mpcC1.png" alt="Dialog Fanus" />
+        <div class="brandText">
+          <div class="brandTitle">Dialog Fanus</div>
+          <div class="brandSub">Modern • Lüks • Sade Tasarım Paneli</div>
+        </div>
+      </div>
+      <div class="topbarRight">
+        <button id="logoutBtn" class="btn ghost hidden" type="button">Çıkış</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <section id="loginCard" class="card loginCard">
+        <h1>Giriş</h1>
+        <p class="muted">Panel erişimi için şifre gereklidir.</p>
+        <form id="loginForm" class="stack">
+          <label class="field">
+            <div class="label">Şifre</div>
+            <input id="passwordInput" placeholder="Şifreyi yaz" type="password" autocomplete="current-password" />
+          </label>
+          <button class="btn" type="submit">Giriş yap</button>
+          <div id="loginError" class="error hidden"></div>
+        </form>
+      </section>
+
+      <div id="appGrid" class="grid hidden">
+        <section class="card">
+          <h2>1) Bilgi Gir</h2>
+          <div class="stack">
+            <div class="row">
+              <label class="field">
+                <div class="label">Format</div>
+                <select id="modeSelect">
+                  <option value="post">Kare Gönderi (1:1)</option>
+                  <option value="story">Hikaye (9:16)</option>
+                </select>
+              </label>
+              <label class="field">
+                <div class="label">Tasarım Şablonu</div>
+                <select id="templateSelect"></select>
+              </label>
+            </div>
+
+            <label class="field">
+              <div class="label">Başlık</div>
+              <input id="titleInput" placeholder="Örn: İncek Mahallesinde Kaçırılmayacak Fırsat" />
+            </label>
+
+            <label class="field">
+              <div class="label">Açıklama</div>
+              <textarea id="descInput" placeholder="Örn: Şehrin merkezinde, geniş balkonlu, ferah ve kullanışlı…"></textarea>
+            </label>
+
+            <div class="row">
+              <label class="field">
+                <div class="label">Gayrimenkul Tipi</div>
+                <select id="assetTypeSelect">
+                  <option value="daire">Daire</option>
+                  <option value="arsa">Arsa</option>
+                  <option value="hobi">Hobi Bahçesi</option>
+                  <option value="mustakil">Müstakil Ev</option>
+                </select>
+              </label>
+              <label class="field">
+                <div class="label">Durum</div>
+                <select id="dealTypeSelect">
+                  <option value="satilik">Satılık</option>
+                  <option value="kiralik">Kiralık</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="row">
+              <label class="field">
+                <div class="label">Fiyat</div>
+                <input id="priceInput" placeholder="Örn: 5.500.000 TL" />
+              </label>
+              <label class="field">
+                <div id="areaLabel" class="label">Oda Sayısı</div>
+                <input id="areaInput" placeholder="Örn: 3+1" />
+              </label>
+            </div>
+
+            <div class="row">
+              <label class="field">
+                <div class="label">Gayrimenkul Danışmanı</div>
+                <input id="consultantNameInput" placeholder="Ad Soyad" />
+              </label>
+              <label class="field">
+                <div class="label">İletişim Hattı</div>
+                <input id="consultantPhoneInput" placeholder="05xx xxx xx xx" inputmode="tel" />
+              </label>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <h2>2) Fotoğraf Seç</h2>
+          <div class="stack">
+            <input id="photoInput" type="file" accept="image/*" />
+            <div id="photoThumbs" class="thumbs"></div>
+            <div id="photoEmpty" class="emptyBox">Lütfen bir görsel seçin</div>
+          </div>
+
+          <div class="divider"></div>
+
+          <h2>2.1) Marka Logosu (Opsiyonel)</h2>
+          <div class="stack">
+            <input id="brandLogoInput" type="file" accept="image/*" />
+            <div class="muted">Doğru logoyu buradan yüklersen, orta-alt logoda onu kullanır (localStorage’a kaydeder).</div>
+          </div>
+
+          <div class="divider"></div>
+
+          <button id="generateBtn" class="btn big" type="button">GÖRSELİ OLUŞTUR</button>
+
+          <div id="appError" class="error hidden"></div>
+        </section>
+
+        <section class="card">
+          <h2>3) Önizleme ve İndir</h2>
+          <div id="resultEmpty" class="emptyBox resultEmpty">Oluşturulan görsel burada görünecek</div>
+          <div id="resultWrap" class="stack hidden">
+            <div class="resultFrame">
+              <img id="resultImg" class="resultImg" alt="Sonuç" />
+            </div>
+            <button id="downloadBtn" class="btn" type="button">PNG Olarak İndir</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Hidden Render Engine -->
+    <div class="htmlRenderWrap" aria-hidden="true">
+      <div id="htmlCanvas" class="htmlCanvas sq layout-hero-glass">
+        <div class="htmlBg"></div>
+        <div class="htmlPhoto">
+          <img id="canvasPhoto" alt="" />
+          <div id="canvasPhotoPlaceholder" class="ph"></div>
+        </div>
+
+        <div class="htmlOverlay">
+          <div class="chipRow">
+            <div id="chipDeal" class="chip">SATILIK</div>
+            <div id="chipAsset" class="chip">DAİRE</div>
+            <div id="chipArea" class="chip">3+1</div>
+          </div>
+
+          <div id="canvasTitle" class="headline">LÜKS GAYRİMENKUL</div>
+          <div id="canvasDesc" class="subcopy hidden"></div>
+          <div id="canvasPrice" class="price">Fiyat Teklifi Alın</div>
+
+          <div class="agent">
+            <div id="canvasAgentName" class="agentName">Dialog Fanus Danışmanı</div>
+            <div id="canvasAgentPhone" class="agentPhone">Dialog Fanus Hattı</div>
+          </div>
+        </div>
+
+        <img
+          id="bottomLogo"
+          class="brandBottomLogo"
+          alt=""
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+          src=""
+        />
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="muted">© Dialog Fanus Gayrimenkul • Developed By Batın Savaş</div>
+    </footer>
+
+    <div id="progressModal" class="progressModal hidden" role="dialog" aria-modal="true" aria-label="İşleniyor">
+      <div class="progressCard">
+        <div class="progressTitle">Hazırlanıyor</div>
+        <div id="progressBar" class="progressBar"></div>
+        <div id="progressText" class="progressText">Tasarım detayları işleniyor… %0</div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/html-to-image@1.11.13/dist/html-to-image.js"></script>
+    <script defer src="./app.js"></script>
+  </body>
+</html>
+
