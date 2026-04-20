@@ -1,7 +1,7 @@
 /* global htmlToImage */
 
 const BRAND_BOTTOM_LOGO_URL =
-  'https://r.resimlink.com/RAqf21BspoiC.png'
+  'https://i.imgur.com/7VjOfvP.png'
 
 const STORAGE_KEYS = {
   authed: 'df_authed_static',
